@@ -1,0 +1,3 @@
+skip-path: venv/
+quiet: true
+compact: true

@@ -1,0 +1,41 @@
+name: Checkov Scan Repo
+on:
+  push:
+  workflow_dispatch:
+  pull_request:
+
+jobs:
+  scan-repo:
+    name: Scan Repo
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Check out the repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
+ 
+      - name: Download checkov
+        run: |
+          pip install -U checkov
+
+      - name: Run checkov all
+        continue-on-error: true
+        run: |
+          # Consumes BC_API_KEY & PRISMA_API_URL environment variables
+          # Will only work with valid license
+          checkov -d . -o github_failed_only
+
+      - name: Run Bridgecrew 
+        id: Bridgecrew
+        uses: bridgecrewio/bridgecrew-action@master 
+        env:
+          PRISMA_API_URL: https://api2.eu.prismacloud.io
+        with:
+          api-key: ${{ secrets.BC_API_KEY }}

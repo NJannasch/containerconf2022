@@ -1,0 +1,27 @@
+name: Create OpenAPI Spec
+on:
+  pull_request:
+  push:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  create_openapi_spec:
+    name: Create OpenAPI Spec
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: |
+          pip3 install -r requirements.txt
+
+      - name: Create OpenAPI Spec
+        run: |
+          python3 generate_openapi.py
+      
+      - name: Scan OpenAPI Spec
+        run: |
+          echo "Test"

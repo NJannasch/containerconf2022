@@ -1,0 +1,3 @@
+fastapi==0.83.0
+uvicorn
+flask==0.12.1
